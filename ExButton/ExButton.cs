@@ -155,7 +155,7 @@ namespace ExTools
                 return;
             }
 
-            _animator.Play(animName);
+            _animator.Play(animName, 0, 0F);
         }
 
 #if UNITY_EDITOR
