@@ -18,6 +18,7 @@ namespace ExTools
         }
 
         [SerializeField] Image _image;
+        [SerializeField] Animator _animator;
         [SerializeField] TransitionType _transitionType;
         [SerializeField] ColorTransition _colorTransition;
         [SerializeField] AnimationTransition _animationTransition;
@@ -34,14 +35,15 @@ namespace ExTools
         protected override void Awake()
         {
             base.Awake();
-            _image.CrossFadeColor(_colorTransition.NormalColor, 0F, true, true);
+
+            SetNormal();
         }
 
         public void OnPointerDown(PointerEventData eventData)
         {
             _isHold = true;
             _lastClickTime = Time.time;
-            _image.CrossFadeColor(_colorTransition.PressedColor, IMAGE_COLOR_FADE_TIME, true, true);
+            SetPressed();
 
             Invoke("OnHold", HOLD_THRESHOLD_TIME);
         }
@@ -79,22 +81,82 @@ namespace ExTools
         {
             _isHold = false;
             CancelInvoke();
-            _image.CrossFadeColor(_colorTransition.NormalColor, IMAGE_COLOR_FADE_TIME, true, true);
+            SetNormal();
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
             // ホバー時処理
             if (!_isHold)
-                _image.CrossFadeColor(_colorTransition.HoverColor, IMAGE_COLOR_FADE_TIME, true, true);
+                SetHover();
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
             if (!_isHold)
-                _image.CrossFadeColor(_colorTransition.NormalColor, IMAGE_COLOR_FADE_TIME, true, true);
+                SetNormal();
         }
 
+
+        private void SetNormal()
+        {
+            switch (_transitionType)
+            {
+                case TransitionType.Color:
+                    _image.CrossFadeColor(_colorTransition.NormalColor, IMAGE_COLOR_FADE_TIME, true, true);
+                    break;
+                case TransitionType.Animation:
+                    PlayAnimation(_animationTransition.NormalName);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void SetHover()
+        {
+            switch (_transitionType)
+            {
+                case TransitionType.Color:
+                    _image.CrossFadeColor(_colorTransition.HoverColor, IMAGE_COLOR_FADE_TIME, true, true);
+                    break;
+                case TransitionType.Animation:
+                    PlayAnimation(_animationTransition.HoverName);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void SetPressed()
+        {
+            switch (_transitionType)
+            {
+                case TransitionType.Color:
+                    _image.CrossFadeColor(_colorTransition.PressedColor, IMAGE_COLOR_FADE_TIME, true, true);
+                    break;
+                case TransitionType.Animation:
+                    PlayAnimation(_animationTransition.PressedName);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// アニメーションを再生。
+        /// </summary>
+        /// <param name="animName"></param>
+        private void PlayAnimation(string animName)
+        {
+            if (_animator == null)
+            {
+                Debug.LogWarning("Please set 'Animator Component", this);
+                return;
+            }
+
+            _animator.Play(animName);
+        }
 
 #if UNITY_EDITOR
         protected override void Reset()
