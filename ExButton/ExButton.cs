@@ -74,9 +74,6 @@ namespace ExTools
             TapPostProcess();
         }
 
-        /// <summary>
-        /// タップイベント後処理
-        /// </summary>
         private void TapPostProcess()
         {
             _isHold = false;
@@ -86,7 +83,6 @@ namespace ExTools
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            // ホバー時処理
             if (!_isHold)
                 SetHover();
         }
@@ -143,10 +139,6 @@ namespace ExTools
             }
         }
 
-        /// <summary>
-        /// アニメーションを再生。
-        /// </summary>
-        /// <param name="animName"></param>
         private void PlayAnimation(string animName)
         {
             if (_animator == null)
