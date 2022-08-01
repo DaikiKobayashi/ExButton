@@ -9,7 +9,7 @@ namespace ExTools
 {
     [AddComponentMenu("UI/ExButton")]
     [RequireComponent(typeof(Image))]
-    public class ExButton : UIBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
+    public class ExButton : Selectable
     {
         enum TransitionType
         {
@@ -42,7 +42,12 @@ namespace ExTools
             SetNormal();
         }
 
-        public void OnPointerDown(PointerEventData eventData)
+        public override void OnSelect(BaseEventData eventData)
+        {
+            print("on select.");
+        }
+
+        public override void OnPointerDown(PointerEventData eventData)
         {
             _isHold = true;
             _lastClickTime = Time.time;
@@ -51,7 +56,7 @@ namespace ExTools
             Invoke("OnHold", HOLD_THRESHOLD_TIME);
         }
 
-        public void OnPointerUp(PointerEventData eventData)
+        public override void OnPointerUp(PointerEventData eventData)
         {
             if (Time.time - _lastClickTime < HOLD_THRESHOLD_TIME)
                 OnTap();
@@ -84,13 +89,13 @@ namespace ExTools
             SetNormal();
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
+        public override void OnPointerEnter(PointerEventData eventData)
         {
             if (!_isHold)
                 SetHover();
         }
 
-        public void OnPointerExit(PointerEventData eventData)
+        public override void OnPointerExit(PointerEventData eventData)
         {
             if (!_isHold)
                 SetNormal();
