@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 namespace ExTools
 {
+    [AddComponentMenu("UI/ExButton")]
     [RequireComponent(typeof(Image))]
     public class ExButton : UIBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
     {
@@ -15,6 +16,7 @@ namespace ExTools
             None = 0,
             Color = 1,
             Animation = 2,
+            SpriteSwap = 3,
         }
 
         [SerializeField] Image _image;
@@ -22,6 +24,7 @@ namespace ExTools
         [SerializeField] TransitionType _transitionType;
         [SerializeField] ColorTransition _colorTransition;
         [SerializeField] AnimationTransition _animationTransition;
+        [SerializeField] SpriteSwapTransition _spriteSwapTransition;
 
         public Action onTapCallback;
         public Action onHoldCallback;
@@ -104,6 +107,9 @@ namespace ExTools
                 case TransitionType.Animation:
                     PlayAnimation(_animationTransition.NormalName);
                     break;
+                case TransitionType.SpriteSwap:
+                    _image.sprite = _spriteSwapTransition.NormalSprite;
+                    break;
                 default:
                     break;
             }
@@ -119,6 +125,9 @@ namespace ExTools
                 case TransitionType.Animation:
                     PlayAnimation(_animationTransition.HoverName);
                     break;
+                case TransitionType.SpriteSwap:
+                    _image.sprite = _spriteSwapTransition.HoverSprite;
+                    break;
                 default:
                     break;
             }
@@ -133,6 +142,9 @@ namespace ExTools
                     break;
                 case TransitionType.Animation:
                     PlayAnimation(_animationTransition.PressedName);
+                    break;
+                case TransitionType.SpriteSwap:
+                    _image.sprite = _spriteSwapTransition.PressedSprite;
                     break;
                 default:
                     break;

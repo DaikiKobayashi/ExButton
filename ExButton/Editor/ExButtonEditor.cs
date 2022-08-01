@@ -17,6 +17,7 @@ namespace ExTools
                 transitionType = serializedObject.FindProperty("_transitionType");
                 colorTransition = serializedObject.FindProperty("_colorTransition");
                 animationTransition = serializedObject.FindProperty("_animationTransition");
+                spriteSwapTransition = serializedObject.FindProperty("_spriteSwapTransition");
             }
 
             public SerializedProperty image { get; set; }
@@ -28,6 +29,8 @@ namespace ExTools
             public SerializedProperty colorTransition { get; set; }
 
             public SerializedProperty animationTransition { get; set; }
+
+            public SerializedProperty spriteSwapTransition { get; set; }
         }
 
         Propertys propertys = null;
@@ -68,6 +71,9 @@ namespace ExTools
                             EditorGUILayout.LabelField("Please set 'Animator Component'.", style);
                         }
                         EditorGUILayout.PropertyField(propertys.animationTransition);
+                        break;
+                    case 3:
+                        EditorGUILayout.PropertyField(propertys.spriteSwapTransition);
                         break;
                     default:
                         break;

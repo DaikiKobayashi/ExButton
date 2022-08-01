@@ -28,4 +28,16 @@ namespace ExTools
         public string HoverName { get => hoverName; set => hoverName = value; }
         public string PressedName { get => pressedName; set => pressedName = value; }
     }
+
+    [Serializable]
+    public class SpriteSwapTransition
+    {
+        [SerializeField] Sprite normalSprite;
+        [SerializeField] Sprite hoverSprite;
+        [SerializeField] Sprite pressedSprite;
+
+        public Sprite NormalSprite { get => normalSprite; set => normalSprite = value; }
+        public Sprite HoverSprite { get => hoverSprite; set => hoverSprite = value; }
+        public Sprite PressedSprite { get => pressedSprite; set => pressedSprite = value; }
+    }
 }

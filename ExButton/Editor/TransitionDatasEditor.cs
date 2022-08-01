@@ -60,4 +60,32 @@ namespace ExTools
             return EditorGUIUtility.singleLineHeight * 3;
         }
     }
+
+    [CustomPropertyDrawer(typeof(SpriteSwapTransition))]
+    public class SpriteSwapTransitionEditor : PropertyDrawer
+    {
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            var normal = property.FindPropertyRelative("normalSprite");
+            var hover = property.FindPropertyRelative("hoverSprite");
+            var pressed = property.FindPropertyRelative("pressedSprite");
+
+            position.height = EditorGUIUtility.singleLineHeight;
+
+            EditorGUI.PropertyField(position, normal);
+
+            position.y += EditorGUIUtility.singleLineHeight;
+
+            EditorGUI.PropertyField(position, hover);
+
+            position.y += EditorGUIUtility.singleLineHeight;
+
+            EditorGUI.PropertyField(position, pressed);
+        }
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            return EditorGUIUtility.singleLineHeight * 3;
+        }
+    }
 }
