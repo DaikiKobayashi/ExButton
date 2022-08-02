@@ -7,25 +7,9 @@ using UnityEngine.UI;
 
 namespace ExTools
 {
-    [AddComponentMenu("UI/ExButton")]
     [RequireComponent(typeof(Image))]
     public class ExButton : Selectable
     {
-        enum TransitionType
-        {
-            None = 0,
-            Color = 1,
-            Animation = 2,
-            SpriteSwap = 3,
-        }
-
-        [SerializeField] Image _image;
-        [SerializeField] Animator _animator;
-        [SerializeField] TransitionType _transitionType;
-        [SerializeField] ColorTransition _colorTransition;
-        [SerializeField] AnimationTransition _animationTransition;
-        [SerializeField] SpriteSwapTransition _spriteSwapTransition;
-
         public Action onTapCallback;
         public Action onHoldCallback;
 
@@ -38,26 +22,27 @@ namespace ExTools
         protected override void Awake()
         {
             base.Awake();
-
-            SetNormal();
         }
 
         public override void OnSelect(BaseEventData eventData)
         {
-            print("on select.");
+            base.OnSelect(eventData);
         }
 
         public override void OnPointerDown(PointerEventData eventData)
         {
+            base.OnPointerDown(eventData);
+
             _isHold = true;
             _lastClickTime = Time.time;
-            SetPressed();
 
             Invoke("OnHold", HOLD_THRESHOLD_TIME);
         }
 
         public override void OnPointerUp(PointerEventData eventData)
         {
+            base.OnPointerUp(eventData);
+
             if (Time.time - _lastClickTime < HOLD_THRESHOLD_TIME)
                 OnTap();
         }
@@ -86,93 +71,16 @@ namespace ExTools
         {
             _isHold = false;
             CancelInvoke();
-            SetNormal();
         }
 
         public override void OnPointerEnter(PointerEventData eventData)
         {
-            if (!_isHold)
-                SetHover();
+            base.OnPointerEnter(eventData);
         }
 
         public override void OnPointerExit(PointerEventData eventData)
         {
-            if (!_isHold)
-                SetNormal();
+            base.OnPointerExit(eventData);
         }
-
-
-        private void SetNormal()
-        {
-            switch (_transitionType)
-            {
-                case TransitionType.Color:
-                    _image.CrossFadeColor(_colorTransition.NormalColor, IMAGE_COLOR_FADE_TIME, true, true);
-                    break;
-                case TransitionType.Animation:
-                    PlayAnimation(_animationTransition.NormalName);
-                    break;
-                case TransitionType.SpriteSwap:
-                    _image.sprite = _spriteSwapTransition.NormalSprite;
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        private void SetHover()
-        {
-            switch (_transitionType)
-            {
-                case TransitionType.Color:
-                    _image.CrossFadeColor(_colorTransition.HoverColor, IMAGE_COLOR_FADE_TIME, true, true);
-                    break;
-                case TransitionType.Animation:
-                    PlayAnimation(_animationTransition.HoverName);
-                    break;
-                case TransitionType.SpriteSwap:
-                    _image.sprite = _spriteSwapTransition.HoverSprite;
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        private void SetPressed()
-        {
-            switch (_transitionType)
-            {
-                case TransitionType.Color:
-                    _image.CrossFadeColor(_colorTransition.PressedColor, IMAGE_COLOR_FADE_TIME, true, true);
-                    break;
-                case TransitionType.Animation:
-                    PlayAnimation(_animationTransition.PressedName);
-                    break;
-                case TransitionType.SpriteSwap:
-                    _image.sprite = _spriteSwapTransition.PressedSprite;
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        private void PlayAnimation(string animName)
-        {
-            if (_animator == null)
-            {
-                Debug.LogWarning("Please set 'Animator Component", this);
-                return;
-            }
-
-            _animator.Play(animName, 0, 0F);
-        }
-
-#if UNITY_EDITOR
-        protected override void Reset()
-        {
-            TryGetComponent(out _image);
-            _transitionType = TransitionType.Color;
-        }
-#endif
     }
 }
